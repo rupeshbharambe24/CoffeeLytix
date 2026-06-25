@@ -10,7 +10,7 @@ import {
   updateEquipment,
   type EquipmentInput,
 } from "@/lib/db";
-import { uploadImage, deleteImageByPath } from "@/lib/storage";
+import { compressImageToDataUrl } from "@/lib/image";
 import { equipmentFormSchema, type EquipmentFormValues } from "@/lib/schemas";
 import { EQUIPMENT_TYPES, type Equipment } from "@/lib/types";
 import { Button } from "@/components/ui/button";
@@ -66,17 +66,10 @@ export function EquipmentForm({
     if (!user) return;
     try {
       let photoURL = initial?.photoURL ?? null;
-      let photoPath = initial?.photoPath ?? null;
-
       if (file) {
-        const result = await uploadImage(user.uid, "equipment", file);
-        if (photoPath) await deleteImageByPath(photoPath);
-        photoURL = result.url;
-        photoPath = result.path;
-      } else if (existingUrl === null && initial?.photoPath) {
-        await deleteImageByPath(initial.photoPath);
+        photoURL = await compressImageToDataUrl(file);
+      } else if (existingUrl === null) {
         photoURL = null;
-        photoPath = null;
       }
 
       const input: EquipmentInput = {
@@ -85,7 +78,6 @@ export function EquipmentForm({
         notes: values.notes || undefined,
         rating: rated ? (values.rating ?? null) : null,
         photoURL,
-        photoPath,
       };
 
       const id = initial

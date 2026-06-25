@@ -84,7 +84,6 @@ export interface Entry {
   milk: boolean;
   milkType?: string | null;
   photoURL?: string | null;
-  photoPath?: string | null;
   ratings: Ratings;
   overallRating: number;
   tags: string[];
@@ -100,7 +99,6 @@ export interface Bean {
   roast?: RoastLevel;
   origin?: string;
   photoURL?: string | null;
-  photoPath?: string | null;
   tastingNotes?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -111,7 +109,6 @@ export interface Cafe {
   name: string;
   address?: string;
   photoURL?: string | null;
-  photoPath?: string | null;
   notes?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -122,7 +119,6 @@ export interface Equipment {
   name: string;
   type?: EquipmentType;
   photoURL?: string | null;
-  photoPath?: string | null;
   notes?: string;
   rating?: number | null;
   createdAt: Date;

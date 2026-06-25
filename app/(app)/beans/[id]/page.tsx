@@ -8,7 +8,6 @@ import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { useBean, useCafes, useEntries } from "@/lib/hooks";
 import { deleteBean } from "@/lib/db";
-import { deleteImageByPath } from "@/lib/storage";
 import {
   averageOverall,
   entriesForBean,
@@ -65,7 +64,6 @@ export default function BeanDetailPage() {
     if (!user || !bean) return;
     try {
       await deleteBean(user.uid, bean.id);
-      if (bean.photoPath) await deleteImageByPath(bean.photoPath);
       toast.success("Bean deleted");
       router.push("/beans");
     } catch (err) {

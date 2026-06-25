@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { createBean, updateBean, type BeanInput } from "@/lib/db";
-import { uploadImage, deleteImageByPath } from "@/lib/storage";
+import { compressImageToDataUrl } from "@/lib/image";
 import { beanFormSchema, type BeanFormValues } from "@/lib/schemas";
 import { ROAST_LEVELS, type Bean } from "@/lib/types";
 import { Button } from "@/components/ui/button";
@@ -58,17 +58,10 @@ export function BeanForm({
     if (!user) return;
     try {
       let photoURL = initial?.photoURL ?? null;
-      let photoPath = initial?.photoPath ?? null;
-
       if (file) {
-        const result = await uploadImage(user.uid, "beans", file);
-        if (photoPath) await deleteImageByPath(photoPath);
-        photoURL = result.url;
-        photoPath = result.path;
-      } else if (existingUrl === null && initial?.photoPath) {
-        await deleteImageByPath(initial.photoPath);
+        photoURL = await compressImageToDataUrl(file);
+      } else if (existingUrl === null) {
         photoURL = null;
-        photoPath = null;
       }
 
       const input: BeanInput = {
@@ -78,7 +71,6 @@ export function BeanForm({
         origin: values.origin || undefined,
         tastingNotes: values.tastingNotes || undefined,
         photoURL,
-        photoPath,
       };
 
       const id = initial

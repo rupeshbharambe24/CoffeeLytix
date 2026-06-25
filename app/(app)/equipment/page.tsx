@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { useEquipment } from "@/lib/hooks";
 import { deleteEquipment } from "@/lib/db";
-import { deleteImageByPath } from "@/lib/storage";
 import type { Equipment } from "@/lib/types";
 import { PageHeader } from "@/components/page-header";
 import { EquipmentCard } from "@/components/equipment-card";
@@ -22,7 +21,6 @@ function EquipmentActions({ item }: { item: Equipment }) {
     if (!user) return;
     try {
       await deleteEquipment(user.uid, item.id);
-      if (item.photoPath) await deleteImageByPath(item.photoPath);
       toast.success("Equipment deleted");
     } catch (err) {
       console.error(err);

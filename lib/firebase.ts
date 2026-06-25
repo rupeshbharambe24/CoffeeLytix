@@ -13,11 +13,6 @@ import {
   connectFirestoreEmulator,
   type Firestore,
 } from "firebase/firestore";
-import {
-  getStorage,
-  connectStorageEmulator,
-  type FirebaseStorage,
-} from "firebase/storage";
 import { getAnalytics, isSupported as analyticsIsSupported } from "firebase/analytics";
 
 // Real values come from NEXT_PUBLIC_FIREBASE_* env vars. The non-empty
@@ -65,7 +60,6 @@ function createFirestore(): Firestore {
 
 export const auth: Auth = getAuth(app);
 export const db: Firestore = createFirestore();
-export const storage: FirebaseStorage = getStorage(app);
 export const googleProvider = new GoogleAuthProvider();
 
 // Connect to the Local Emulator Suite when explicitly enabled.
@@ -77,7 +71,6 @@ if (isBrowser && useEmulator && !globalThis.__COFFEELYTIX_EMULATORS_CONNECTED__)
   globalThis.__COFFEELYTIX_EMULATORS_CONNECTED__ = true;
   connectAuthEmulator(auth, "http://127.0.0.1:9099", { disableWarnings: true });
   connectFirestoreEmulator(db, "127.0.0.1", 8080);
-  connectStorageEmulator(storage, "127.0.0.1", 9199);
 }
 
 // Best-effort Firebase Analytics — browser only, when supported and configured.

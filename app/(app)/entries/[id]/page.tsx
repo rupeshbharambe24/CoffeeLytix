@@ -17,7 +17,6 @@ import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { useBeans, useCafes, useEntry, useEquipment } from "@/lib/hooks";
 import { deleteEntry } from "@/lib/db";
-import { deleteImageByPath } from "@/lib/storage";
 import { formatLongDate } from "@/lib/format";
 import { RATING_ATTRIBUTES, RATING_LABELS } from "@/lib/types";
 import { Photo } from "@/components/photo";
@@ -78,7 +77,6 @@ export default function EntryDetailPage() {
     if (!user || !entry) return;
     try {
       await deleteEntry(user.uid, entry.id);
-      if (entry.photoPath) await deleteImageByPath(entry.photoPath);
       toast.success("Entry deleted");
       router.push("/entries");
     } catch (err) {

@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { PlusIcon } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { createEntry, updateEntry, type EntryInput } from "@/lib/db";
-import { uploadImage, deleteImageByPath } from "@/lib/storage";
+import { compressImageToDataUrl } from "@/lib/image";
 import { useBeans, useCafes, useEquipment } from "@/lib/hooks";
 import { entryFormSchema, type EntryFormValues } from "@/lib/schemas";
 import {
@@ -101,17 +101,10 @@ export function EntryForm({
     if (!user) return;
     try {
       let photoURL = initial?.photoURL ?? null;
-      let photoPath = initial?.photoPath ?? null;
-
       if (file) {
-        const result = await uploadImage(user.uid, "entries", file);
-        if (photoPath) await deleteImageByPath(photoPath);
-        photoURL = result.url;
-        photoPath = result.path;
-      } else if (existingUrl === null && initial?.photoPath) {
-        await deleteImageByPath(initial.photoPath);
+        photoURL = await compressImageToDataUrl(file);
+      } else if (existingUrl === null) {
         photoURL = null;
-        photoPath = null;
       }
 
       const input: EntryInput = {
@@ -124,7 +117,6 @@ export function EntryForm({
         milk: values.milk,
         milkType: values.milk ? values.milkType || null : null,
         photoURL,
-        photoPath,
         ratings: {
           aroma: values.aroma,
           flavor: values.flavor,

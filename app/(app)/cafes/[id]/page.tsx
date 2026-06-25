@@ -14,7 +14,6 @@ import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { useCafe, useEntries } from "@/lib/hooks";
 import { deleteCafe } from "@/lib/db";
-import { deleteImageByPath } from "@/lib/storage";
 import { averageOverall, entriesForCafe } from "@/lib/chart-helpers";
 import { Photo } from "@/components/photo";
 import { ScoreBadge } from "@/components/score-badge";
@@ -60,7 +59,6 @@ export default function CafeDetailPage() {
     if (!user || !cafe) return;
     try {
       await deleteCafe(user.uid, cafe.id);
-      if (cafe.photoPath) await deleteImageByPath(cafe.photoPath);
       toast.success("Café deleted");
       router.push("/cafes");
     } catch (err) {

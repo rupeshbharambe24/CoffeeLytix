@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { createCafe, updateCafe, type CafeInput } from "@/lib/db";
-import { uploadImage, deleteImageByPath } from "@/lib/storage";
+import { compressImageToDataUrl } from "@/lib/image";
 import { cafeFormSchema, type CafeFormValues } from "@/lib/schemas";
 import type { Cafe } from "@/lib/types";
 import { Button } from "@/components/ui/button";
@@ -48,17 +48,10 @@ export function CafeForm({
     if (!user) return;
     try {
       let photoURL = initial?.photoURL ?? null;
-      let photoPath = initial?.photoPath ?? null;
-
       if (file) {
-        const result = await uploadImage(user.uid, "cafes", file);
-        if (photoPath) await deleteImageByPath(photoPath);
-        photoURL = result.url;
-        photoPath = result.path;
-      } else if (existingUrl === null && initial?.photoPath) {
-        await deleteImageByPath(initial.photoPath);
+        photoURL = await compressImageToDataUrl(file);
+      } else if (existingUrl === null) {
         photoURL = null;
-        photoPath = null;
       }
 
       const input: CafeInput = {
@@ -66,7 +59,6 @@ export function CafeForm({
         address: values.address || undefined,
         notes: values.notes || undefined,
         photoURL,
-        photoPath,
       };
 
       const id = initial

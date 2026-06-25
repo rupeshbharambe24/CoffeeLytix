@@ -41,14 +41,17 @@ In the [Firebase Console](https://console.firebase.google.com/):
    present by default; add your Vercel domain after deploying.
 3. **Firestore Database** → *Create database* → **Production mode** → choose a region
    (e.g. `asia-south1` for Bangalore).
-4. **Storage** → *Get started* → keep the default bucket (production mode).
-5. **Register a Web App**: Project settings (⚙️) → *General* → *Your apps* →
+4. **Register a Web App**: Project settings (⚙️) → *General* → *Your apps* →
    **Add app → Web (`</>`)**. Copy the `firebaseConfig` values — you'll need:
    - `apiKey`, `authDomain`, `projectId`, `storageBucket`, `messagingSenderId`, `appId`
 
+> **No Cloud Storage / Blaze plan needed.** Photos are resized + compressed in the
+> browser and stored inline in Firestore, so the whole app runs on the free
+> **Spark** plan — only Auth and Firestore are required.
+
 ### What I need from you
-The six **Web App config values** above (paste them into `.env.local`, see next step),
-and the three services **enabled**: Google **Auth**, **Firestore**, **Storage**.
+The **Web App config values** above (paste them into `.env.local`, see next step),
+and two services **enabled**: Google **Auth** and **Firestore**.
 
 ---
 
@@ -77,16 +80,16 @@ NEXT_PUBLIC_USE_FIREBASE_EMULATOR=false
 
 ## 3. Deploy the Security Rules
 
-This repo ships `firestore.rules`, `firestore.indexes.json` and `storage.rules`.
-Deploy them so per-user access (and opt-in sharing) is enforced:
+This repo ships `firestore.rules` and `firestore.indexes.json`. Deploy them so
+per-user access (and opt-in sharing) is enforced (`.firebaserc` already targets
+your project, so no `firebase use --add` is needed):
 
 ```bash
 firebase login
-firebase use --add        # select your project
-firebase deploy --only firestore:rules,firestore:indexes,storage
+firebase deploy --only firestore:rules,firestore:indexes
 ```
 
-(You can also paste the rules into the Console's Rules tabs.)
+(You can also paste the rules into the Console's Rules tab.)
 
 ---
 
@@ -147,13 +150,16 @@ app/                      # App Router routes
 components/               # UI: cards, forms, charts, navbar, primitives (ui/)
 lib/                      # firebase, auth-context, db, hooks, schemas, chart-helpers, share
 firestore.rules           # per-user access + opt-in sharing
-storage.rules             # owner-only photo access
 firebase.json             # rules + emulator config
 docs/superpowers/specs/   # design specification
 ```
 
 ## Notes
 
+- **Photos (free, no Cloud Storage):** Uploaded photos are resized and JPEG-compressed
+  in the browser and stored inline in the Firestore document (kept under Firestore's
+  ~1 MB doc limit). This avoids the Blaze-only Cloud Storage entirely, so everything
+  stays on the free Spark plan.
 - **Sharing & privacy:** Compare works via an opt-in share code. While sharing is on,
   anyone with your code can read your entries (read-only). Turning it off revokes access.
 - **Offline:** Firestore caches data in IndexedDB and Serwist precaches the app shell,
