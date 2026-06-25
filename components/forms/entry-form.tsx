@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm, useWatch, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -61,6 +61,18 @@ export function EntryForm({
   const { data: cafes } = useCafes();
   const { data: beans } = useBeans();
   const { data: equipment } = useEquipment();
+
+  // Maps so the Select trigger shows the café/bean *name* for the selected id.
+  const cafeItems = useMemo(() => {
+    const m: Record<string, string> = { [NONE]: "No café / at home" };
+    for (const c of cafes) m[c.id] = c.name;
+    return m;
+  }, [cafes]);
+  const beanItems = useMemo(() => {
+    const m: Record<string, string> = { [NONE]: "Not sure / none" };
+    for (const b of beans) m[b.id] = b.name;
+    return m;
+  }, [beans]);
 
   const [file, setFile] = useState<File | null>(null);
   const [existingUrl, setExistingUrl] = useState<string | null>(
@@ -190,6 +202,7 @@ export function EntryForm({
                 name="cafeId"
                 render={({ field }) => (
                   <Select
+                    items={cafeItems}
                     value={field.value ?? NONE}
                     onValueChange={(v) => field.onChange(v === NONE ? null : v)}
                   >
@@ -230,6 +243,7 @@ export function EntryForm({
                 name="beanId"
                 render={({ field }) => (
                   <Select
+                    items={beanItems}
                     value={field.value ?? NONE}
                     onValueChange={(v) => field.onChange(v === NONE ? null : v)}
                   >

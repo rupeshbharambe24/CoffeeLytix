@@ -25,6 +25,9 @@ const RATING_FILTERS = [
   { value: "6", label: "6+ — solid" },
   { value: "4", label: "4+ — okay" },
 ];
+const RATING_FILTER_ITEMS: Record<string, string> = Object.fromEntries(
+  RATING_FILTERS.map((r) => [r.value, r.label]),
+);
 
 export default function EntriesPage() {
   const { data: entries, loading } = useEntries();
@@ -37,6 +40,13 @@ export default function EntriesPage() {
     () => new Map(cafes.map((c) => [c.id, c.name])),
     [cafes],
   );
+
+  // Maps the selected café id to its name in the filter's trigger.
+  const cafeFilterItems = useMemo(() => {
+    const m: Record<string, string> = { [ANY]: "All cafés" };
+    for (const c of cafes) m[c.id] = c.name;
+    return m;
+  }, [cafes]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -83,7 +93,11 @@ export default function EntriesPage() {
               aria-label="Search entries"
             />
           </div>
-          <Select value={cafeFilter} onValueChange={(v) => setCafeFilter(v ?? ANY)}>
+          <Select
+            items={cafeFilterItems}
+            value={cafeFilter}
+            onValueChange={(v) => setCafeFilter(v ?? ANY)}
+          >
             <SelectTrigger className="sm:w-44" aria-label="Filter by café">
               <SelectValue />
             </SelectTrigger>
@@ -96,7 +110,11 @@ export default function EntriesPage() {
               ))}
             </SelectContent>
           </Select>
-          <Select value={ratingFilter} onValueChange={(v) => setRatingFilter(v ?? ANY)}>
+          <Select
+            items={RATING_FILTER_ITEMS}
+            value={ratingFilter}
+            onValueChange={(v) => setRatingFilter(v ?? ANY)}
+          >
             <SelectTrigger className="sm:w-40" aria-label="Filter by rating">
               <SelectValue />
             </SelectTrigger>
