@@ -1,0 +1,26 @@
+{
+  "name": "Coffee Passport",
+  "short_name": "Coffee Passport",
+  "description": "Your personal passport for coffee — log every cup, build your tasting profile, and discover what you love.",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4ece0",
+  "theme_color": "#3a2418",
+  "categories": ["food", "lifestyle", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

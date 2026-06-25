@@ -1,0 +1,50 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    // A user's data is readable by others only while they have sharing enabled.
+    function isSharing(uid) {
+      return exists(/databases/$(database)/documents/users/$(uid))
+        && get(/databases/$(database)/documents/users/$(uid)).data.shareEnabled == true;
+    }
+
+    match /users/{uid} {
+      // The profile document itself is private to its owner.
+      allow read, write: if isOwner(uid);
+
+      match /entries/{entryId} {
+        allow read: if isOwner(uid) || (isSignedIn() && isSharing(uid));
+        allow write: if isOwner(uid);
+      }
+      match /beans/{beanId} {
+        allow read: if isOwner(uid) || (isSignedIn() && isSharing(uid));
+        allow write: if isOwner(uid);
+      }
+      match /cafes/{cafeId} {
+        allow read: if isOwner(uid) || (isSignedIn() && isSharing(uid));
+        allow write: if isOwner(uid);
+      }
+      match /equipment/{equipId} {
+        allow read: if isOwner(uid) || (isSignedIn() && isSharing(uid));
+        allow write: if isOwner(uid);
+      }
+    }
+
+    // Public lookup mapping a share code to a uid + display name.
+    match /shareCodes/{code} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn()
+        && request.resource.data.uid == request.auth.uid;
+      allow delete: if isSignedIn() && resource.data.uid == request.auth.uid;
+    }
+  }
+}
