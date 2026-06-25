@@ -16,7 +16,7 @@ const hanken = Hanken_Grotesk({
   display: "swap",
 });
 
-const APP_NAME = "Coffee Passport";
+const APP_NAME = "Coffeelytix";
 const APP_DESCRIPTION =
   "Your personal passport for coffee — log every cup, build your tasting profile, and discover what you love.";
 

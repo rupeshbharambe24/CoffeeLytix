@@ -18,6 +18,7 @@ import {
   connectStorageEmulator,
   type FirebaseStorage,
 } from "firebase/storage";
+import { getAnalytics, isSupported as analyticsIsSupported } from "firebase/analytics";
 
 // Real values come from NEXT_PUBLIC_FIREBASE_* env vars. The non-empty
 // fallbacks let the app build and render before credentials are configured
@@ -33,6 +34,7 @@ const firebaseConfig: FirebaseOptions = {
   messagingSenderId:
     process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "0000000000",
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:0:web:missing",
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || undefined,
 };
 
 const useEmulator =
@@ -68,14 +70,25 @@ export const googleProvider = new GoogleAuthProvider();
 
 // Connect to the Local Emulator Suite when explicitly enabled.
 declare global {
-  var __CP_EMULATORS_CONNECTED__: boolean | undefined;
+  var __COFFEELYTIX_EMULATORS_CONNECTED__: boolean | undefined;
 }
 
-if (isBrowser && useEmulator && !globalThis.__CP_EMULATORS_CONNECTED__) {
-  globalThis.__CP_EMULATORS_CONNECTED__ = true;
+if (isBrowser && useEmulator && !globalThis.__COFFEELYTIX_EMULATORS_CONNECTED__) {
+  globalThis.__COFFEELYTIX_EMULATORS_CONNECTED__ = true;
   connectAuthEmulator(auth, "http://127.0.0.1:9099", { disableWarnings: true });
   connectFirestoreEmulator(db, "127.0.0.1", 8080);
   connectStorageEmulator(storage, "127.0.0.1", 9199);
+}
+
+// Best-effort Firebase Analytics — browser only, when supported and configured.
+if (isBrowser && !useEmulator && firebaseConfig.measurementId) {
+  analyticsIsSupported()
+    .then((ok) => {
+      if (ok) getAnalytics(app);
+    })
+    .catch(() => {
+      /* analytics unavailable — ignore */
+    });
 }
 
 export { app };

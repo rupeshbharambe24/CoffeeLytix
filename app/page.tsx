@@ -107,7 +107,7 @@ export default function LandingPage() {
       <footer className="border-t border-border/70">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-6 text-sm text-muted-foreground sm:flex-row">
           <Logo showText={false} />
-          <p>Coffee Passport · Brewed for coffee lovers.</p>
+          <p>Coffeelytix · Brewed for coffee lovers.</p>
         </div>
       </footer>
     </div>

@@ -1,4 +1,4 @@
-# Coffee Passport — Design Specification
+# Coffeelytix — Design Specification
 
 **Date:** 2026-06-25
 **Status:** Approved (proceed to implementation)
@@ -6,7 +6,7 @@
 
 ## 1. Summary & Scope
 
-Coffee Passport is a mobile-first, installable (PWA) coffee-tracking web app. Users log
+Coffeelytix is a mobile-first, installable (PWA) coffee-tracking web app. Users log
 and rate every coffee they try, build tasting profiles, browse analytics, manage
 bean/equipment/café inventories, and compare tastes with a friend.
 

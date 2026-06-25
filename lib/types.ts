@@ -1,4 +1,4 @@
-/** Shared domain types for Coffee Passport. */
+/** Shared domain types for Coffeelytix. */
 
 export const BREW_TYPES = [
   "Espresso",

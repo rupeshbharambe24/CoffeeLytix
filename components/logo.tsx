@@ -34,7 +34,7 @@ export function Logo({
       </span>
       {showText && (
         <span className="font-heading text-lg font-semibold tracking-tight">
-          Coffee Passport
+          Coffeelytix
         </span>
       )}
     </span>

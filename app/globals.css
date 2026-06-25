@@ -48,7 +48,7 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* ---- Coffee Passport — "Tasting Journal" palette ---- */
+/* ---- Coffeelytix — "Tasting Journal" palette ---- */
 :root {
   --background: oklch(0.975 0.012 75); /* warm cream paper */
   --foreground: oklch(0.27 0.03 50); /* dark espresso ink */

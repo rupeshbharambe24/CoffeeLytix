@@ -1,4 +1,4 @@
-# ☕ Coffee Passport
+# ☕ Coffeelytix
 
 A mobile-first, installable (PWA) coffee-tracking app. Log every cup, rate what you
 taste, build your tasting profile, browse analytics, manage your beans / cafés /

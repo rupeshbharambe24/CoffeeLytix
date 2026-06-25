@@ -1,6 +1,6 @@
 {
-  "name": "Coffee Passport",
-  "short_name": "Coffee Passport",
+  "name": "Coffeelytix",
+  "short_name": "Coffeelytix",
   "description": "Your personal passport for coffee — log every cup, build your tasting profile, and discover what you love.",
   "start_url": "/dashboard",
   "scope": "/",

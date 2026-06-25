@@ -68,7 +68,7 @@ export default function SettingsPage() {
         <div className="flex items-center justify-between">
           <div className="text-sm">
             <p className="font-medium">{user?.email}</p>
-            <p className="text-muted-foreground">Coffee Passport · v1.0</p>
+            <p className="text-muted-foreground">Coffeelytix · v1.0</p>
           </div>
           <Button
             variant="outline"
